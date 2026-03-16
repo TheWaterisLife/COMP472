@@ -1,0 +1,82 @@
+
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+
+\usepackage{cvpr}
+
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+
+\usepackage[pagebackref,breaklinks,colorlinks]{hyperref}
+
+\usepackage[capitalize]{cleveref}
+\crefname{section}{Sec.}{Secs.}
+\Crefname{section}{Section}{Sections}
+\crefname{table}{Tab.}{Tabs.}
+\Crefname{table}{Table}{Tables}
+
+\begin{document}
+
+\title{American Sign Language Recognition Using Convolutional Neural Networks}
+
+\author{
+{\small Aboubacry Ba 40264343\quad Samy Belmihoub 40251504\quad Ryan Mazari 40241379\\ \small Mohamed Rayen Mrizek 40234343 \quad Hannah Refour-Tannenbaum 40243619}\\[0.3em]
+COMP 472 \quad
+Group J \quad Concordia University \quad Winter 2026
+}
+
+
+\maketitle
+%%%%%%%%% BODY TEXT
+\noindent\textbf{Problem Statement \& Application \textbullet}
+American Sign Language (ASL) is used by approximately 500,000 deaf and hard-of-hearing individuals in North America \cite{mitchell2022asl}, yet communication barriers still limit their access to education, health care, and the workplace. Automated ASL recognition systems can reduce this gap through real-time translation and by encouraging more inclusive communication.
+
+This project focuses on recognizing static ASL hand gestures using Convolutional Neural Networks (CNNs). The first step involves classifying hand signs for three commands: \textit{SPACE}, \textit{NOTHING}, and \textit{DELETE}. This is followed by the classification of digits 0--9, and finally the letters of the English alphabet. Throughout development, this project aims to improve the accuracy of the classifiers, evaluate performance on datasets of varying complexity, and gain experience with image classification techniques.
+
+However, variability in hand size, skin tone, hand positioning and orientation, as well as lighting conditions and backgrounds, can present challenges. In addition, some gestures (e.g., \textit{M}, \textit{N}, and \textit{T}) look very similar, making them difficult to differentiate.
+
+Overall, the goal of this project is to develop and assess an ASL system which uses a CNN and to show how automated recognition could help make communication easier and more inclusive for people who are hard-of-hearing.
+
+\vspace{0.5em}
+\noindent\textbf{Image Dataset Selection }
+
+\noindent\textbf{Dataset 1: ASL Commands Dataset \textbullet}
+This dataset is a subset of the ASL Alphabet dataset; it contains three command gesture classes: \textit{SPACE}, \textit{DELETE}, and \textit{NOTHING}. Each class contains approximately 3,000 images, each with a resolution of $200 \times 200$ pixels\cite{asl_alphabet_kaggle}.
+
+\vspace{0.5em}
+\noindent\textbf{Dataset 2: ASL Digits Dataset \textbullet}
+This dataset was created by High School students and has 10 classes (digits 0--9), each with 218 images \cite{mavi2020digits}.
+
+\vspace{0.5em}
+\noindent\textbf{Dataset 3: ASL Alphabets Dataset \textbullet}
+The training dataset contains 87,000 images, which are $200 \times 200$ pixels. There are 29 classes, of which we use only the 26 alphabet letter classes (A--Z), excluding the three utility classes which are used in Dataset 1. The original letter subset has about 78,000 images in RGB format, or approximately 3,000 images per class. In order to satisfy course requirements, stratified random subsampling will be conducted to reduce the dataset to 1,500 images per class\cite{asl_alphabet_kaggle}.
+
+\vspace{0.5em}
+\noindent\textbf{Proposed Methodology \textbullet}
+The problem of recognizing a subset of ASL gestures from images will be solved using Convolutional Neural Networks (CNNs). This study aims to compare the performance of different CNN architectures on three datasets with different levels of classification complexity (commands, digits, and alphabet) to assess how dataset characteristics and architecture choice affect recognition accuracy and generalization.
+
+All datasets will be preprocessed using the same pipeline. Images will be resized to a fixed resolution and normalized to the range $[0,1]$. Data augmentation, such as rotation, flipping, and zooming, will be applied during training to help the models learn underlying patterns \cite{milvus_augmentation}. Each dataset will be split into 80\% training, 10\% validation, and 10\% testing sets using stratified sampling to maintain class distribution.
+
+The CNN architectures that will be used are MobileNetV2 (lightweight) \cite{mobilenetv2}, ResNet-10 (medium complexity) \cite{resnet}, and VGG16 (high complexity) \cite{vgg16}. Training these architectures on the three datasets will result in nine models. Additionally, two transfer learning models will be trained using pre-trained weights on selected dataset--architecture combinations. All models will be trained under identical conditions using categorical cross-entropy loss, the Adam optimizer, and early stopping to prevent overfitting.
+
+Performance metrics will be evaluated using accuracy, precision, recall, F1-score, and confusion matrices. Comparisons will be made across datasets, architectures, and training strategies. It is expected that the low-complexity commands dataset will achieve the highest accuracy, whereas the alphabet dataset will be the most challenging. Lightweight models are expected to perform efficiently with lower computational cost, while deeper models may achieve higher accuracy at the expense of increased computational cost. The results of this project aim to help researchers in selecting appropriate CNN architectures and training strategies when developing ASL recognition systems.
+
+\clearpage
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{gantt}
+    \caption{Project timeline (Gantt chart).}
+    \label{fig:gantt}
+\end{figure*}
+\clearpage
+
+%%%%%%%%% REFERENCES
+{\small
+\bibliographystyle{unsrt}
+\bibliography{egbib}
+}
+
+\end{document}
