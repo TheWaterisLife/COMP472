@@ -1,4 +1,5 @@
 # Model weights
+*.pth
 *.h5
 *.onnx
 *.pkl

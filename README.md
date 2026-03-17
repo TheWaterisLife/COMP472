@@ -1,5 +1,9 @@
 # ASL Recognition Using Convolutional Neural Networks
 
+
+We are mainly using Google Drive as a sharing platform for our project. Here is the link to our Google Drive:
+https://drive.google.com/drive/folders/1Zs071JSPT88VIHSQXuHdqIvBFeRL0Urx?usp=drive_link
+
 **COMP 472 — Applied Artificial Intelligence | Concordia University | Winter 2026**
 
 A comparative study of CNN architectures for American Sign Language (ASL) hand gesture recognition. Three models are trained and evaluated across three datasets of increasing complexity, with transfer learning applied to the most challenging task.
