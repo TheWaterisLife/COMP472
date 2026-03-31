@@ -96,7 +96,7 @@ python notebooks/ResNet10_ASL.py
 python notebooks/MobileNetV2_ASL.py
 ```
 
-Each script trains on all three datasets and saves results (model checkpoints, training curves, confusion matrices) to `results/<model>/`.
+Each script trains on all three datasets and saves results such as training curves, confusion matrices, and, when retained, model checkpoints under `results/<model>/`.
 
 ### 3. Test on a Single Image
 
@@ -104,6 +104,8 @@ Each script trains on all three datasets and saves results (model checkpoints, t
 python test_model.py --model results/mobilenetv2/alphabets_model.pth --image path/to/hand.jpg
 python test_model.py --model results/resnet10/digits_model.pth --image path/to/digit.jpg --top 3
 ```
+
+These commands require compatible saved `.pth` checkpoints to be present locally.
 
 ---
 

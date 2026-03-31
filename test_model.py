@@ -46,13 +46,28 @@ def build_model(arch, num_classes):
             nn.Dropout(0.3),
             nn.Linear(256, num_classes),
         )
-    elif arch in ('vgg16', 'vgg16_tl'):
-        model = models.vgg16(weights=None)
+    elif arch == 'vgg16':
+        model = models.vgg16_bn(weights=None)
         model.classifier = nn.Sequential(
             nn.Linear(512 * 7 * 7, 512),
+            nn.BatchNorm1d(512),
             nn.ReLU(inplace=True),
             nn.Dropout(0.4),
             nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.4),
+            nn.Linear(256, num_classes),
+        )
+    elif arch == 'vgg16_tl':
+        model = models.vgg16(weights=None)
+        model.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 512),
+            nn.BatchNorm1d(512),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.4),
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
             nn.ReLU(inplace=True),
             nn.Dropout(0.4),
             nn.Linear(256, num_classes),
