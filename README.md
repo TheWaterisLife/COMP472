@@ -46,20 +46,21 @@ All models use:
 ## Project Structure
 
 ```
-ai-models/
+COMP472/
+├── README.md
 ├── notebooks/                  # Training scripts
 │   ├── VGG16_ASL.py
 │   ├── ResNet10_ASL.py
-│   └── MobileNetV2_ASL.py
-├── results/                    # Trained models, plots, and reports
-│   ├── vgg16/                  #   Confusion matrices, training curves, .pth checkpoints
+│   ├── MobileNetV2_ASL.py
+│   └── MobileNetV2_Optimization.py
+├── results/                    # Saved plots, reports, and experiment outputs
+│   ├── vgg16/
 │   ├── resnet10/
 │   ├── mobilenetv2/
-│   └── vgg16_v1/               #   Earlier VGG16 experiment
-├── datasets/                   # Raw & split datasets (git-ignored)
-├── proposal/                   # Project proposal document
-├── prepare_datasets.py         # Dataset splitting & subsampling utility
-└── test_model.py               # Single-image inference script
+│   └── vgg16_v1/               # Earlier VGG16 experiment
+├── prepare_datasets.py         # Dataset splitting and subsampling utility
+├── test_model.py               # Single-image inference script
+└── datasets/                   # Raw & split datasets
 ```
 
 ---
