@@ -1,6 +1,6 @@
 """
 MobileNetV2_Optimization.py — Hyperparameter Tuning on ASL Digits
-==================================================================
+
 Varies learning rate, batch size, and loss function one-at-a-time
 around the baseline (lr=1e-3, batch=64, CrossEntropyLoss).
 

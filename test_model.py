@@ -1,6 +1,6 @@
 """
 test_model.py — Test a trained ASL model on individual images
-==============================================================
+
 Load a saved .pth checkpoint and predict the ASL sign from an image.
 
 Usage:
@@ -17,13 +17,10 @@ import torch
 import torch.nn as nn
 from torchvision import transforms, models
 from PIL import Image
-
-# ── Import ResNet10 architecture (needed to rebuild the model) ──────────────
+# Import ResNet10 architecture (needed to rebuild the model)
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'notebooks'))
 from ResNet10_ASL import ResNet10
-
-
-# ── Model Builders ──────────────────────────────────────────────────────────
+# Model Builders
 def build_model(arch, num_classes):
     """Rebuild the model architecture given the arch string saved in the checkpoint."""
     if arch in ('mobilenetv2', 'mobilenetv2_tl'):
@@ -75,9 +72,7 @@ def build_model(arch, num_classes):
     else:
         raise ValueError(f"Unknown architecture: {arch}")
     return model
-
-
-# ── Image Preprocessing ────────────────────────────────────────────────────
+# Image Preprocessing
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -102,9 +97,7 @@ def predict(model, image_path, class_names, device, top_k=5):
     for prob, idx in zip(top_probs, top_idxs):
         results.append((class_names[idx.item()], prob.item() * 100))
     return results
-
-
-# ── Main ────────────────────────────────────────────────────────────────────
+# Main
 def main():
     parser = argparse.ArgumentParser(description='Test a trained ASL model on an image')
     parser.add_argument('--model', required=True, help='Path to saved .pth checkpoint')

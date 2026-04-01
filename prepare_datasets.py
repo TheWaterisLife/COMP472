@@ -1,6 +1,6 @@
 """
 prepare_datasets.py
-====================
+
 Splits the raw ASL datasets into train / val / test folders (80 / 10 / 10)
 with stratified sampling.  Run once before uploading to Google Drive.
 
@@ -15,8 +15,7 @@ import shutil
 import random
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-
-# ─── Configuration ──────────────────────────────────────────────────────────
+# Configuration
 RANDOM_STATE = 42
 ALPHABET_SUBSAMPLE = 1500        # images per class for alphabets dataset
 BASE_DIR = Path(__file__).resolve().parent
@@ -34,9 +33,7 @@ OUT_ALPHABETS = BASE_DIR / "datasets" / "asl_alphabets"
 COMMAND_CLASSES  = ["del", "nothing", "space"]
 ALPHABET_CLASSES = [chr(c) for c in range(ord("A"), ord("Z") + 1)]
 DIGIT_CLASSES    = [str(d) for d in range(10)]
-
-
-# ─── Helpers ────────────────────────────────────────────────────────────────
+# Helpers
 def split_and_copy(file_list: list[str], src_dir: Path, out_base: Path, class_name: str):
     """Split a list of filenames 80/10/10 and copy into out_base/{train,val,test}/class_name/."""
     # First split: 80% train, 20% temp
@@ -100,9 +97,7 @@ def process_dataset(name: str, src_base: Path, out_base: Path, classes: list[str
         total_all[3] += te
     print(f"  {'-'*12} {'-'*6} {'-'*6} {'-'*5} {'-'*5}")
     print(f"  {'TOTAL':<12} {total_all[0]:>6} {total_all[1]:>6} {total_all[2]:>5} {total_all[3]:>5}")
-
-
-# ─── Main ───────────────────────────────────────────────────────────────────
+# Main
 if __name__ == "__main__":
     print("ASL Dataset Preparation Script")
     print("=" * 60)

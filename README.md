@@ -52,7 +52,8 @@ COMP472/
 │   ├── VGG16_ASL.py
 │   ├── ResNet10_ASL.py
 │   ├── MobileNetV2_ASL.py
-│   └── MobileNetV2_Optimization.py
+│   ├── MobileNetV2_Optimization.py
+│   └── generate_tsne_figures.py
 ├── results/                    # Saved plots, reports, and experiment outputs
 │   ├── vgg16/
 │   ├── resnet10/

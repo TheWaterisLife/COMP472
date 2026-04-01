@@ -1,6 +1,6 @@
 """
 VGG16_ASL.py — Train VGG16 on ASL datasets (local GPU)
-=======================================================
+
 Trains VGG16 on 3 datasets: Commands, Digits, Alphabets.
 Includes a transfer-learning variant on Alphabets using ImageNet weights.
 
@@ -20,8 +20,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, models
 from sklearn.metrics import classification_report, confusion_matrix
-
-# ── Configuration ───────────────────────────────────────────────────────────
+# Configuration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DATASETS = {
@@ -57,9 +56,7 @@ print(f"Device: {DEVICE}")
 if torch.cuda.is_available():
     print(f"GPU: {torch.cuda.get_device_name(0)}")
     print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
-
-
-# ── Data Loading ────────────────────────────────────────────────────────────
+# Data Loading
 def get_transforms(augment=False):
     if augment:
         return transforms.Compose([
@@ -93,9 +90,7 @@ def create_loaders(dataset_path):
     print(f"  Train: {len(train_ds)} images | Val: {len(val_ds)} | Test: {len(test_ds)}")
     print(f"  Classes: {train_ds.classes}")
     return train_loader, val_loader, test_loader, train_ds.classes
-
-
-# ── Model Builders ──────────────────────────────────────────────────────────
+# Model Builders
 def _init_weights(model):
     """Apply Kaiming init to conv/linear layers for from-scratch training."""
     for m in model.modules():
@@ -138,9 +133,7 @@ def build_vgg16(num_classes, pretrained=False):
         _init_weights(model)
 
     return model.to(DEVICE)
-
-
-# ── Training Loop ───────────────────────────────────────────────────────────
+# Training
 def train_model(model, train_loader, val_loader, lr=LEARNING_RATE,
                 epochs=MAX_EPOCHS, patience=EARLY_STOP_PATIENCE):
     criterion = nn.CrossEntropyLoss()
@@ -215,9 +208,7 @@ def train_model(model, train_loader, val_loader, lr=LEARNING_RATE,
     if best_state:
         model.load_state_dict(best_state)
     return history
-
-
-# ── Plotting & Evaluation ──────────────────────────────────────────────────
+# Plotting & Evaluation
 def plot_history(history, title, save_name):
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
@@ -286,11 +277,8 @@ def save_model(model, class_names, save_name, arch='vgg16', num_classes=None):
         'state_dict': model.state_dict(),
     }, path)
     print(f"  ✓ Model saved: {path}")
+# MAIN
 
-
-# ═══════════════════════════════════════════════════════════════════════════
-#  MAIN
-# ═══════════════════════════════════════════════════════════════════════════
 if __name__ == '__main__':
 
     for ds_key in ['commands', 'digits', 'alphabets']:
@@ -311,8 +299,7 @@ if __name__ == '__main__':
 
         del model
         torch.cuda.empty_cache()
-
-    # ── Transfer Learning: VGG16 (ImageNet) → Alphabets ────────────────
+# Transfer Learning: VGG16 (ImageNet) → Alphabets
     ds = DATASETS['alphabets']
     print(f"\n{'='*60}")
     print(f"  VGG16 Transfer Learning — {ds['name']}")
