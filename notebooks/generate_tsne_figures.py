@@ -27,7 +27,7 @@ from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, models, transforms
 
 # Paths
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent  # project root (one level up from notebooks/)
 RESULTS_DIR = BASE_DIR / "results" / "tsne"
 FIGURES_DIR = BASE_DIR / "figures"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -372,47 +372,66 @@ def plot_tsne(embeddings, labels, class_names, title, output_path):
     print(f"  Saved: {output_path}")
 
 
-# Main
+# ══════════════════════════════════════════════════════════════════════════════
+#  MAIN
+# ══════════════════════════════════════════════════════════════════════════════
 def main():
     models_to_visualize = []
 
-    # 1. Train ResNet-10 on Commands (only model that needs training)
-    print("\n[1/1] Training ResNet-10 on Commands …")
-    res = build_resnet10(num_classes=3)
-    res, res_classes = train_quick(res, COMMANDS_PATH, LEARNING_RATE_DEFAULT, 3)
+    # ── 1. Train ResNet-10 on Commands ───────────────────────────────────────
+    print("\n[1/4] Training ResNet-10 on Commands …")
+    res_cmd = build_resnet10(num_classes=3)
+    res_cmd, res_cmd_classes = train_quick(res_cmd, COMMANDS_PATH, LEARNING_RATE_DEFAULT, 3)
     models_to_visualize.append({
         "name": "ResNet-10 — Commands",
         "filename": "tsne_resnet10_commands.png",
-        "model": res,
+        "model": res_cmd,
         "extractor": extract_resnet10,
         "dataset_path": COMMANDS_PATH,
-        "class_names": res_classes,
+        "class_names": res_cmd_classes,
     })
 
-    # 2–4. Load existing MobileNetV2 Digits checkpoints
-    EXISTING_CHECKPOINTS = [
-        ("bs_128_model.pth",  "MobileNetV2 — Digits (bs=128)",  "tsne_mobilenetv2_bs128_digits.png"),
-        ("lr_1e-3_model.pth", "MobileNetV2 — Digits (lr=1e-3)", "tsne_mobilenetv2_lr1e3_digits.png"),
-        ("lr_1e-2_model.pth", "MobileNetV2 — Digits (lr=1e-2)", "tsne_mobilenetv2_lr1e2_digits.png"),
-    ]
-    for ckpt_name, title, filename in EXISTING_CHECKPOINTS:
-        ckpt_path = CHECKPOINT_DIR / ckpt_name
-        print(f"\n[+] Loading {ckpt_name} …")
-        ckpt = torch.load(str(ckpt_path), map_location=DEVICE, weights_only=False)
-        model = build_mobilenetv2(ckpt["num_classes"]).to(DEVICE)
-        model.load_state_dict(ckpt["state_dict"])
-        model.eval()
-        models_to_visualize.append({
-            "name": title,
-            "filename": filename,
-            "model": model,
-            "extractor": extract_mobilenetv2,
-            "dataset_path": DIGITS_PATH,
-            "class_names": ckpt["class_names"],
-        })
+    # ── 2. Train ResNet-10 on Digits ─────────────────────────────────────────
+    print("\n[2/4] Training ResNet-10 on Digits …")
+    res_dig = build_resnet10(num_classes=10)
+    res_dig, res_dig_classes = train_quick(res_dig, DIGITS_PATH, LEARNING_RATE_DEFAULT, 10)
+    models_to_visualize.append({
+        "name": "ResNet-10 — Digits",
+        "filename": "tsne_resnet10_digits.png",
+        "model": res_dig,
+        "extractor": extract_resnet10,
+        "dataset_path": DIGITS_PATH,
+        "class_names": res_dig_classes,
+    })
 
-    # Generate t-SNE for all 4
-    print("\nGenerating t-SNE plots")
+    # ── 3. Train VGG16-BN on Digits ──────────────────────────────────────────
+    print("\n[3/4] Training VGG16-BN on Digits …")
+    vgg_dig = build_vgg16bn(num_classes=10)
+    vgg_dig, vgg_dig_classes = train_quick(vgg_dig, DIGITS_PATH, LEARNING_RATE_VGG, 10)
+    models_to_visualize.append({
+        "name": "VGG16-BN — Digits",
+        "filename": "tsne_vgg16_digits.png",
+        "model": vgg_dig,
+        "extractor": extract_vgg16bn,
+        "dataset_path": DIGITS_PATH,
+        "class_names": vgg_dig_classes,
+    })
+
+    # ── 4. Train MobileNetV2 on Digits ───────────────────────────────────────
+    print("\n[4/4] Training MobileNetV2 on Digits …")
+    mob_dig = build_mobilenetv2(num_classes=10)
+    mob_dig, mob_dig_classes = train_quick(mob_dig, DIGITS_PATH, LEARNING_RATE_DEFAULT, 10)
+    models_to_visualize.append({
+        "name": "MobileNetV2 — Digits",
+        "filename": "tsne_mobilenetv2_digits.png",
+        "model": mob_dig,
+        "extractor": extract_mobilenetv2,
+        "dataset_path": DIGITS_PATH,
+        "class_names": mob_dig_classes,
+    })
+
+    # ── Generate t-SNE for all 4 ─────────────────────────────────────────────
+    print("\n── Generating t-SNE plots ──")
     for entry in models_to_visualize:
         print(f"\n  {entry['name']}")
         loader, _ = get_test_loader(entry["dataset_path"])

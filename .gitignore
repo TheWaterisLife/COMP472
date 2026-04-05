@@ -1,12 +1,19 @@
-# Model weights
+# Model weights — *.pth is ignored everywhere (too large for git)
 *.pth
 *.h5
 *.onnx
 *.pkl
+!results/**/*.h5
+!results/**/*.onnx
+!results/**/*.pkl
 
-# Data
+# Datasets — do not commit full splits / raw downloads; only the small test subset
+datasets/*
+!datasets/test_100_per_dataset/
+!datasets/test_100_per_dataset/**
+
+# Misc data folder
 data/
-datasets/
 
 # Python
 __pycache__/
